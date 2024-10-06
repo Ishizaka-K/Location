@@ -1,10 +1,14 @@
 package com.example.locationsample
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.app.Activity
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
@@ -30,7 +34,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (!hasPermission(ACCESS_FINE_LOCATION)) {
+        // 権限のリクエスト（権限がなかったら）
+        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION )!= PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(ACCESS_FINE_LOCATION), 0)
         }
 
@@ -42,9 +47,9 @@ class MainActivity : AppCompatActivity() {
     private suspend fun getLastKnownLocation() {
         try {
             val lastLocation = fusedLocationClient.awaitLastLocation()
-            showLocation(R.id.textView, lastLocation)
+            findViewById<TextView>(R.id.textView).text = lastLocation.asString(Location.FORMAT_MINUTES)
         } catch (e: Exception) {
-            findAndSetText(R.id.textView, "Unable to get location.")
+            findViewById<TextView>(R.id.textView).text = "Unable to get location."
             Log.d(TAG, "Unable to get location", e)
         }
     }
@@ -53,12 +58,16 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient.locationFlow()
             .conflate()
             .catch { e ->
-                findAndSetText(R.id.textView, "Unable to get location.")
+                findViewById<TextView>(R.id.textView).text = "Unable to get location."
                 Log.d(TAG, "Unable to get location", e)
             }
             .asLiveData()
             .observe(this, Observer { location ->
-                showLocation(R.id.textView, location)
+                if (location != null) {
+                    findViewById<TextView>(R.id.textView).text = location.asString(Location.FORMAT_MINUTES)
+                } else {
+                    findViewById<TextView>(R.id.textView).text = "Location unknown"
+                }
                 Log.d(TAG, location.toString())
             })
     }
