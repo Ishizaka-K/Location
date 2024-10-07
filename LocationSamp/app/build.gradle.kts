@@ -49,6 +49,4 @@ dependencies {
 
     //Livedata
     implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.livedata.reactivestreams.ktx)
-
 }
