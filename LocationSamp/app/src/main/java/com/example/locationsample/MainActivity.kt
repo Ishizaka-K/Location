@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val TAG = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,4 +85,3 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-const val TAG = "KTXCODELAB"

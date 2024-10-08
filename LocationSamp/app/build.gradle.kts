@@ -33,6 +33,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        compose = true
+    }
 }
 
 dependencies {
@@ -49,4 +52,7 @@ dependencies {
 
     //Livedata
     implementation(libs.androidx.lifecycle.livedata.ktx)
+
+    //Compose
+    //implementation("androidx.compose.ui:ui:1.7.3")
 }
